@@ -7,12 +7,12 @@ using System.Windows;
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("InstaTech_Player")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyTitle("InstaTech Player")]
+[assembly: AssemblyDescription("A video player for recorded InstaTech remote control sessions.")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("InstaTech_Player")]
-[assembly: AssemblyCopyright("Copyright ©  2017")]
+[assembly: AssemblyCompany("Translucency")]
+[assembly: AssemblyProduct("InstaTech Player")]
+[assembly: AssemblyCopyright("Copyright ©  2017 Translucency")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -53,3 +53,5 @@ using System.Windows;
 // [assembly: AssemblyVersion("1.0.*")]
 [assembly: AssemblyVersion("1.0.0.0")]
 [assembly: AssemblyFileVersion("1.0.0.0")]
+[assembly: Guid("335982aa-3c1f-4466-b16f-2aded8578730")]
+

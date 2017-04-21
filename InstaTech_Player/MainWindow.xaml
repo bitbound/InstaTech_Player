@@ -3,10 +3,57 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:wf="clr-namespace:System.Windows.Forms;assembly=System.Windows.Forms"
         xmlns:local="clr-namespace:InstaTech_Player"
         mc:Ignorable="d"
-        Title="MainWindow" Height="350" Width="525">
+        Title="InstaTech Player" Height="450" Width="500" MouseLeftButtonDown="Window_MouseLeftButtonDown" Icon="Assets/InstaTech.png" BorderBrush="Gray" BorderThickness="1" AllowDrop="True" Drop="Window_Drop" DragEnter="Window_DragEnter">
     <Grid>
-        
+        <Grid.Background>
+            <ImageBrush ImageSource="Assets/ITCBackground.png" Opacity="0.75"/>
+        </Grid.Background>
+        <Grid Margin="10,10,10,75">
+            <Button x:Name="buttonMenu" HorizontalAlignment="Right" VerticalAlignment="Top" Height="25" Width="25" Margin="0,15,0,0" Background="Transparent" BorderBrush="Transparent" Click="buttonMenu_Click">
+                <Image Source="Assets/HamburgerMenu_16x.png"></Image>
+                <Button.ContextMenu>
+                    <ContextMenu>
+                        <MenuItem x:Name="menuOpen" Header="Open File" Click="menuOpen_Click" ToolTip="Open a recording file to play." />
+                        <!--<MenuItem x:Name="menuAssociate" Header="Associate Files" Click="menuAssociate_Click" ToolTip="Associate ITR files so they open automatically with InstaTech Player." />-->
+                        <MenuItem x:Name="menuAbout" Header="About" Click="menuAbout_Click" ToolTip="Shows additional information." />
+                    </ContextMenu>
+                </Button.ContextMenu>
+            </Button>
+            <TextBlock Text="InstaTech Player" FontWeight="Bold" FontSize="25" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="0,10,0,0"></TextBlock>
+            <Border Margin="0,60,0,0" BorderBrush="Black" BorderThickness="1">
+                <Grid Background="#7FFFFFFF">
+                    <Viewbox>
+                        <WindowsFormsHost x:Name="hostPlayer" Background="Transparent">
+                            <wf:PictureBox x:Name="picturePlayer" SizeMode="StretchImage" BackColor="Transparent" />
+                        </WindowsFormsHost>
+                    </Viewbox>
+                    <TextBlock x:Name="textDropHere" HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold">Drop an ITR file here to play.</TextBlock>
+                </Grid>
+            </Border>
+        </Grid>
+        <Grid x:Name="gridControls" Height="60" VerticalAlignment="Bottom" HorizontalAlignment="Stretch" Background="#BF808080" Margin="10,0,10,10" Panel.ZIndex="8">
+            <Button x:Name="buttonPlay" Width="30" Height="30" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,5,50,0" BorderThickness="0" Click="buttonPlay_Click">
+                <Button.OpacityMask>
+                    <ImageBrush ImageSource="Assets/PlayVideo_16x.png"/>
+                </Button.OpacityMask>
+                <Image Source="Assets/PlayVideo_16x.png"></Image>
+            </Button>
+            <Button x:Name="buttonStop" Width="30" Height="30" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="50,5,0,0" Background="Transparent" BorderThickness="0" Click="buttonStop_Click">
+                <Button.OpacityMask>
+                    <ImageBrush ImageSource="Assets/Stop_grey_32xLG.png"/>
+                </Button.OpacityMask>
+                <Image Source="Assets/Stop_grey_32xLG.png"></Image>
+            </Button>
+            <Button x:Name="buttonOpen" HorizontalAlignment="Right" Width="20" Height="20" VerticalAlignment="Top" Margin="0,5,20,0" Background="Transparent" BorderBrush="Transparent" BorderThickness="0" Click="menuOpen_Click">
+                <Button.OpacityMask>
+                    <ImageBrush ImageSource="Assets/OpenFolder_64x.png"/>
+                </Button.OpacityMask>
+                <Image Source="Assets/OpenFolder_64x.png"></Image>
+            </Button>
+            <Slider x:Name="sliderVideo" VerticalAlignment="Bottom" HorizontalAlignment="Stretch" Margin="20,0,20,5" ValueChanged="sliderVideo_ValueChanged" PreviewMouseDown="sliderVideo_PreviewMouseDown"/>
+        </Grid>
     </Grid>
 </Window>
