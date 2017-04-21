@@ -6,7 +6,7 @@
         xmlns:wf="clr-namespace:System.Windows.Forms;assembly=System.Windows.Forms"
         xmlns:local="clr-namespace:InstaTech_Player"
         mc:Ignorable="d"
-        Title="InstaTech Player" Height="450" Width="500" MouseLeftButtonDown="Window_MouseLeftButtonDown" Icon="Assets/InstaTech.png" BorderBrush="Gray" BorderThickness="1" AllowDrop="True" Drop="Window_Drop" DragEnter="Window_DragEnter">
+        Title="InstaTech Player" Height="450" Width="500" MouseLeftButtonDown="Window_MouseLeftButtonDown" Icon="Assets/InstaTech.png" BorderBrush="Gray" BorderThickness="1" AllowDrop="True" Drop="Window_Drop" DragEnter="Window_DragEnter" Loaded="Window_Loaded">
     <Grid>
         <Grid.Background>
             <ImageBrush ImageSource="Assets/ITCBackground.png" Opacity="0.75"/>

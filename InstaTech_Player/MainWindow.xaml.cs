@@ -26,10 +26,19 @@ namespace InstaTech_Player
         bool IsPlaying { get; set; } = false;
         Bitmap SourceImage { get; set; }
         Graphics Graphic { get; set; }
+        string[] CurrentFrame { get; set; }
+        string[] NextFrame { get; set; }
 
         public MainWindow()
         {
             InitializeComponent();
+            WPF_Auto_Update.Updater.ServiceURI = "https://instatech.org/Services/Get_Player_Version.cshtml";
+            WPF_Auto_Update.Updater.RemoteFileURI = "https://instatech.org/Downloads/InstaTech_Player.exe";
+            WPF_Auto_Update.Updater.CheckCommandLineArgs();
+        }
+        private async void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            await WPF_Auto_Update.Updater.CheckForUpdates(true);
         }
         private void buttonMenu_Click(object sender, RoutedEventArgs e)
         {
@@ -120,15 +129,22 @@ namespace InstaTech_Player
         }
         private async void PlayFile()
         {
+            if (SR == null)
+            {
+                return;
+            }
             IsPlaying = true;
             while (IsPlaying && !SR.EndOfStream)
             {
                 try
                 {
-                    var thisFrame = SR.ReadLine().Split(',');
-                    if (DateTime.TryParse(thisFrame[0], out DateTime timeStamp))
+                    if (CurrentFrame == null)
                     {
-                        var imageData = thisFrame[1];
+                        CurrentFrame = (await SR.ReadLineAsync()).Split(',');
+                    }
+                    if (DateTime.TryParse(CurrentFrame[0], out DateTime timeStamp))
+                    {
+                        var imageData = CurrentFrame[1];
                         var byteArray = Convert.FromBase64String(imageData);
                         var length = byteArray.Length;
 
@@ -143,15 +159,15 @@ namespace InstaTech_Player
                             }
                         }
                         picturePlayer.Refresh();
-                        var nextFrame = SR.ReadLine()?.Split(',');
-                        if (nextFrame == null)
+                        NextFrame = SR.ReadLine()?.Split(',');
+                        if (NextFrame == null)
                         {
                             continue;
                         }
                         DateTime nextTimeStamp;
-                        while (!DateTime.TryParse(nextFrame?[0], out nextTimeStamp) && !SR.EndOfStream)
+                        while (!DateTime.TryParse(NextFrame?[0], out nextTimeStamp) && !SR.EndOfStream)
                         {
-                            if (int.TryParse(nextFrame[0], out int width) && int.TryParse(nextFrame[1], out int height))
+                            if (int.TryParse(NextFrame[0], out int width) && int.TryParse(NextFrame[1], out int height))
                             {
                                 hostPlayer.Width = width;
                                 hostPlayer.Height = height;
@@ -159,7 +175,7 @@ namespace InstaTech_Player
                                 Graphic = Graphics.FromImage(SourceImage);
                                 picturePlayer.Image = SourceImage;
                             }
-                            nextFrame = SR.ReadLine().Split(',');
+                            NextFrame = SR.ReadLine().Split(',');
                         }
                         if (nextTimeStamp > timeStamp)
                         {
@@ -172,7 +188,7 @@ namespace InstaTech_Player
                     }
                     else
                     {
-                        if (int.TryParse(thisFrame[0], out int width) && int.TryParse(thisFrame[1], out int height))
+                        if (int.TryParse(CurrentFrame[0], out int width) && int.TryParse(CurrentFrame[1], out int height))
                         {
                             hostPlayer.Width = width;
                             hostPlayer.Height = height;
@@ -182,12 +198,13 @@ namespace InstaTech_Player
                         }
                     }
                 }
-                catch (Exception ex)
+                catch
                 {
-                    var test = ex;
+                    NextFrame = SR.ReadLine()?.Split(',');
                 }
                 if (IsPlaying)
                 {
+                    CurrentFrame = NextFrame;
                     sliderVideo.Value = FS.Position;
                 }
             }
@@ -209,8 +226,11 @@ namespace InstaTech_Player
         {
             if (!IsPlaying)
             {
-                SR.BaseStream.Position = (long)sliderVideo.Value;
-                Graphic.Clear(Color.Transparent);
+                if (SR != null)
+                {
+                    SR.BaseStream.Position = (long)sliderVideo.Value;
+                    Graphic.Clear(Color.Transparent);
+                }
             }
         }
 
