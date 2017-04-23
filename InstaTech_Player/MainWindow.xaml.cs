@@ -24,6 +24,9 @@ namespace InstaTech_Player
         FileStream FS { get; set; }
         StreamReader SR { get; set; }
         bool IsPlaying { get; set; } = false;
+        int PlaySpeed { get; set; } = 1;
+        bool QuickSeekEnabled { get; set; } = false;
+        long SeekTo { get; set; } = 0;
         Bitmap SourceImage { get; set; }
         Graphics Graphic { get; set; }
         string[] CurrentFrame { get; set; }
@@ -60,6 +63,16 @@ namespace InstaTech_Player
                 LoadFile(ofd.FileName);
             }
             
+        }
+
+        private void menuQuickSeek_Checked(object sender, RoutedEventArgs e)
+        {
+            QuickSeekEnabled = true;
+        }
+
+        private void menuQuickSeek_Unchecked(object sender, RoutedEventArgs e)
+        {
+            QuickSeekEnabled = false;
         }
         private void menuAbout_Click(object sender, RoutedEventArgs e)
         {
@@ -104,6 +117,62 @@ namespace InstaTech_Player
         {
             Close();
         }
+
+        private void buttonPlay_Click(object sender, RoutedEventArgs e)
+        {
+            if (IsPlaying)
+            {
+                return;
+            }
+            IsPlaying = true;
+            PlayFile();
+        }
+
+        private void buttonStop_Click(object sender, RoutedEventArgs e)
+        {
+            IsPlaying = false;
+        }
+
+        private void sliderVideo_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            if (!IsPlaying)
+            {
+                if (SR != null)
+                {
+                    if (!QuickSeekEnabled)
+                    {
+                        SeekTo = (long)sliderVideo.Value;
+                        FS.Position = 0;
+                    }
+                    else
+                    {
+                        SR.BaseStream.Position = (long)sliderVideo.Value;
+                        Graphic.Clear(Color.Transparent);
+                    }
+                }
+            }
+        }
+
+        private void sliderVideo_PreviewMouseDown(object sender, MouseButtonEventArgs e)
+        {
+            IsPlaying = false;
+        }
+
+        private void buttonPlaySpeedUp_Click(object sender, RoutedEventArgs e)
+        {
+            PlaySpeed++;
+            textPlaySpeed.Text = $"x{PlaySpeed}";
+        }
+
+        private void buttonPlaySpeedDown_Click(object sender, RoutedEventArgs e)
+        {
+            if (PlaySpeed > 1)
+            {
+                PlaySpeed--;
+                textPlaySpeed.Text = $"x{PlaySpeed}";
+            }
+        }
+
         private void LoadFile(string FilePath)
         {
             try
@@ -144,6 +213,8 @@ namespace InstaTech_Player
                     }
                     if (DateTime.TryParse(CurrentFrame[0], out DateTime timeStamp))
                     {
+                        textTimestamp.Text = timeStamp.ToString();
+                        textTimestamp.UpdateLayout();
                         var imageData = CurrentFrame[1];
                         var byteArray = Convert.FromBase64String(imageData);
                         var length = byteArray.Length;
@@ -177,9 +248,14 @@ namespace InstaTech_Player
                             }
                             NextFrame = SR.ReadLine().Split(',');
                         }
+                        if (FS.Position < SeekTo && !QuickSeekEnabled)
+                        {
+                            CurrentFrame = NextFrame;
+                            continue;
+                        }
                         if (nextTimeStamp > timeStamp)
                         {
-                            await Task.Delay(nextTimeStamp - timeStamp);
+                            await Task.Delay((nextTimeStamp - timeStamp).Milliseconds / PlaySpeed);
                         }
                         else
                         {
@@ -211,32 +287,5 @@ namespace InstaTech_Player
             IsPlaying = false;
         }
 
-        private void buttonPlay_Click(object sender, RoutedEventArgs e)
-        {
-            IsPlaying = true;
-            PlayFile();
-        }
-
-        private void buttonStop_Click(object sender, RoutedEventArgs e)
-        {
-            IsPlaying = false;
-        }
-
-        private void sliderVideo_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
-        {
-            if (!IsPlaying)
-            {
-                if (SR != null)
-                {
-                    SR.BaseStream.Position = (long)sliderVideo.Value;
-                    Graphic.Clear(Color.Transparent);
-                }
-            }
-        }
-
-        private void sliderVideo_PreviewMouseDown(object sender, MouseButtonEventArgs e)
-        {
-            IsPlaying = false;
-        }
     }
 }

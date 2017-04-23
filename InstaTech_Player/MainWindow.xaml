@@ -6,7 +6,7 @@
         xmlns:wf="clr-namespace:System.Windows.Forms;assembly=System.Windows.Forms"
         xmlns:local="clr-namespace:InstaTech_Player"
         mc:Ignorable="d"
-        Title="InstaTech Player" Height="450" Width="500" MouseLeftButtonDown="Window_MouseLeftButtonDown" Icon="Assets/InstaTech.png" BorderBrush="Gray" BorderThickness="1" AllowDrop="True" Drop="Window_Drop" DragEnter="Window_DragEnter" Loaded="Window_Loaded">
+        Title="InstaTech Player" Height="450" MinHeight="400" Width="500" MinWidth="500" MouseLeftButtonDown="Window_MouseLeftButtonDown" Icon="Assets/InstaTech.png" BorderBrush="Gray" BorderThickness="1" AllowDrop="True" Drop="Window_Drop" DragEnter="Window_DragEnter" Loaded="Window_Loaded">
     <Grid>
         <Grid.Background>
             <ImageBrush ImageSource="Assets/ITCBackground.png" Opacity="0.75"/>
@@ -17,7 +17,11 @@
                 <Button.ContextMenu>
                     <ContextMenu>
                         <MenuItem x:Name="menuOpen" Header="Open File" Click="menuOpen_Click" ToolTip="Open a recording file to play." />
-                        <!--<MenuItem x:Name="menuAssociate" Header="Associate Files" Click="menuAssociate_Click" ToolTip="Associate ITR files so they open automatically with InstaTech Player." />-->
+                        <MenuItem x:Name="menuQuickSeek" Header="Quick Seek" IsCheckable="True" IsChecked="True" Checked="menuQuickSeek_Checked" Unchecked="menuQuickSeek_Unchecked" ToolTipService.ShowDuration="999999">
+                            <MenuItem.ToolTip>
+                                <TextBlock MaxWidth="400" TextWrapping="Wrap" Text="If enabled, video will immediately jump to the selected position when seeking, but only sections of the screen that change between frames will be drawn.  If disabled, the entire image will be reconstructed, but it must quickly scan from the beginning of the video."></TextBlock>
+                            </MenuItem.ToolTip>
+                        </MenuItem>
                         <MenuItem x:Name="menuAbout" Header="About" Click="menuAbout_Click" ToolTip="Shows additional information." />
                     </ContextMenu>
                 </Button.ContextMenu>
@@ -35,25 +39,31 @@
             </Border>
         </Grid>
         <Grid x:Name="gridControls" Height="60" VerticalAlignment="Bottom" HorizontalAlignment="Stretch" Background="#BF808080" Margin="10,0,10,10" Panel.ZIndex="8">
-            <Button x:Name="buttonPlay" Width="30" Height="30" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,5,50,0" BorderThickness="0" Click="buttonPlay_Click">
+            <TextBlock x:Name="textTimestamp" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,5,5,0"></TextBlock>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,30,10,0">
+                <TextBox x:Name="textPlaySpeed" IsReadOnly="True" Width="25" HorizontalContentAlignment="Center">x1</TextBox>
+                <Button x:Name="buttonPlaySpeedUp" Width="15" Click="buttonPlaySpeedUp_Click">↑</Button>
+                <Button x:Name="buttonPlaySpeedDown" Width="15" Click="buttonPlaySpeedDown_Click">↓</Button>
+            </StackPanel>
+            <Button x:Name="buttonPlay" Width="30" Height="30" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,5,65,0" BorderThickness="0" Click="buttonPlay_Click" Cursor="Hand" ToolTip="Play">
                 <Button.OpacityMask>
                     <ImageBrush ImageSource="Assets/PlayVideo_16x.png"/>
                 </Button.OpacityMask>
                 <Image Source="Assets/PlayVideo_16x.png"></Image>
             </Button>
-            <Button x:Name="buttonStop" Width="30" Height="30" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="50,5,0,0" Background="Transparent" BorderThickness="0" Click="buttonStop_Click">
+            <Button x:Name="buttonStop" Width="30" Height="30" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="50,5,0,0" Background="Transparent" BorderThickness="0" Click="buttonStop_Click" Cursor="Hand" ToolTip="Stop">
                 <Button.OpacityMask>
                     <ImageBrush ImageSource="Assets/Stop_grey_32xLG.png"/>
                 </Button.OpacityMask>
                 <Image Source="Assets/Stop_grey_32xLG.png"></Image>
             </Button>
-            <Button x:Name="buttonOpen" HorizontalAlignment="Right" Width="20" Height="20" VerticalAlignment="Top" Margin="0,5,20,0" Background="Transparent" BorderBrush="Transparent" BorderThickness="0" Click="menuOpen_Click">
+            <Button x:Name="buttonOpen" HorizontalAlignment="Left" Width="20" Height="20" VerticalAlignment="Top" Margin="20,10,20,0" Background="Transparent" BorderBrush="Transparent" BorderThickness="0" Click="menuOpen_Click" Cursor="Hand" ToolTip="Open File">
                 <Button.OpacityMask>
                     <ImageBrush ImageSource="Assets/OpenFolder_64x.png"/>
                 </Button.OpacityMask>
                 <Image Source="Assets/OpenFolder_64x.png"></Image>
             </Button>
-            <Slider x:Name="sliderVideo" VerticalAlignment="Bottom" HorizontalAlignment="Stretch" Margin="20,0,20,5" ValueChanged="sliderVideo_ValueChanged" PreviewMouseDown="sliderVideo_PreviewMouseDown"/>
+            <Slider x:Name="sliderVideo" VerticalAlignment="Bottom" HorizontalAlignment="Stretch" Margin="20,0,80,5" ValueChanged="sliderVideo_ValueChanged" PreviewMouseDown="sliderVideo_PreviewMouseDown"/>
         </Grid>
     </Grid>
 </Window>
