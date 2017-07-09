@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
@@ -35,8 +35,8 @@ namespace InstaTech_Player
         public MainWindow()
         {
             InitializeComponent();
-            WPF_Auto_Update.Updater.ServiceURI = "https://instatech.org/Services/Get_Player_Version.cshtml";
-            WPF_Auto_Update.Updater.RemoteFileURI = "https://instatech.org/Downloads/InstaTech_Player.exe";
+            WPF_Auto_Update.Updater.ServiceURI = "https://instatech.azurewebsites.net/Services/Get_Player_Version.cshtml";
+            WPF_Auto_Update.Updater.RemoteFileURI = "https://instatech.azurewebsites.net/Downloads/InstaTech_Player.exe";
             WPF_Auto_Update.Updater.CheckCommandLineArgs();
         }
         private async void Window_Loaded(object sender, RoutedEventArgs e)

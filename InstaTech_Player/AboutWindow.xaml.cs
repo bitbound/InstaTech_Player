@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -32,17 +32,17 @@ namespace InstaTech_Player
         }
         private void hyperWebsite_Click(object sender, RoutedEventArgs e)
         {
-            System.Diagnostics.Process.Start("https://translucency.info");
+            System.Diagnostics.Process.Start("https://translucency.azurewebsites.net");
         }
 
         private void hyperInstaTechWebsite_Click(object sender, RoutedEventArgs e)
         {
-            System.Diagnostics.Process.Start("https://instatech.org");
+            System.Diagnostics.Process.Start("https://instatech.azurewebsites.net");
         }
 
         private void hyperLicense_Click(object sender, RoutedEventArgs e)
         {
-            System.Diagnostics.Process.Start("https://instatech.org/Docs/InstaTech_License.html");
+            System.Diagnostics.Process.Start("https://instatech.azurewebsites.net/Docs/InstaTech_License.html");
         }
 
         private void buttonClose_Click(object sender, RoutedEventArgs e)
