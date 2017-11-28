@@ -32,17 +32,17 @@ namespace InstaTech_Player
         }
         private void hyperWebsite_Click(object sender, RoutedEventArgs e)
         {
-            System.Diagnostics.Process.Start("https://translucency.azurewebsites.net");
+            System.Diagnostics.Process.Start("http://invis.me");
         }
 
         private void hyperInstaTechWebsite_Click(object sender, RoutedEventArgs e)
         {
-            System.Diagnostics.Process.Start("https://instatech.azurewebsites.net");
+            System.Diagnostics.Process.Start("http://instatech.invis.me");
         }
 
         private void hyperLicense_Click(object sender, RoutedEventArgs e)
         {
-            System.Diagnostics.Process.Start("https://instatech.azurewebsites.net/Docs/InstaTech_License.html");
+            System.Diagnostics.Process.Start("http://instatech.invis.me/Docs/InstaTech_License.html");
         }
 
         private void buttonClose_Click(object sender, RoutedEventArgs e)
